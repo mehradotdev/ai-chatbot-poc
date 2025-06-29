@@ -1,6 +1,5 @@
 import { streamText } from "ai"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
+import { auth } from "@/lib/auth"
 import { getModelInstance } from "@/lib/ai-providers"
 import { addMessage, getConversation, createConversation } from "@/lib/db"
 
@@ -8,7 +7,7 @@ export const maxDuration = 30
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await auth()
 
     if (!session?.user?.id) {
       return new Response("Unauthorized", { status: 401 })
