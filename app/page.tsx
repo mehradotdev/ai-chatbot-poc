@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useSession, signOut } from "next-auth/react"
 import { useChat } from "ai/react"
 import { useState, useEffect, useRef } from "react"
@@ -24,13 +26,17 @@ export default function ChatPage() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
+  // Conversation title is captured once – just before we send the 1st message.
+  const [draftTitle, setDraftTitle] = useState("")
+
   const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages } = useChat({
     api: "/api/chat",
     body: {
       conversationId: currentConversationId,
       modelProvider: selectedProvider,
       modelName: selectedModel,
-      title: input.slice(0, 50) || "New Chat",
+      // use draftTitle; it’s "" on first render, updated right before send
+      title: draftTitle || "New Chat",
     },
     onResponse: (response) => {
       const conversationId = response.headers.get("X-Conversation-Id")
@@ -135,6 +141,13 @@ export default function ChatPage() {
     }
   }
 
+  const onSend = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    // capture the first 50 chars of whatever the user typed
+    setDraftTitle(input.slice(0, 50).trim() || "New Chat")
+    handleSubmit(e)
+  }
+
   if (status === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -235,7 +248,7 @@ export default function ChatPage() {
         {/* Input */}
         <div className="border-t p-4">
           <div className="max-w-4xl mx-auto">
-            <form onSubmit={handleSubmit} className="flex gap-2">
+            <form onSubmit={onSend} className="flex gap-2">
               <Input
                 value={input}
                 onChange={handleInputChange}

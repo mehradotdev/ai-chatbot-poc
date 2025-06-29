@@ -1,9 +1,8 @@
 "use client"
 
 import ReactMarkdown from "react-markdown"
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
-import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism"
 import remarkGfm from "remark-gfm"
+import { Highlight, type Language } from "prism-react-renderer"
 import { Copy, Check } from "lucide-react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -13,46 +12,69 @@ interface MarkdownRendererProps {
 }
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
-  const [copiedCode, setCopiedCode] = useState<string | null>(null)
+  const [copied, setCopied] = useState<string | null>(null)
 
-  const copyToClipboard = async (code: string) => {
+  const copy = async (code: string) => {
     await navigator.clipboard.writeText(code)
-    setCopiedCode(code)
-    setTimeout(() => setCopiedCode(null), 2000)
+    setCopied(code)
+    setTimeout(() => setCopied(null), 2000)
   }
 
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
       components={{
-        code({ node, inline, className, children, ...props }) {
+        code({ inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || "")
           const code = String(children).replace(/\n$/, "")
 
-          if (!inline && match) {
+          /* ── Inline code ────────────────────────────── */
+          if (inline || !match) {
             return (
-              <div className="relative group">
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                  onClick={() => copyToClipboard(code)}
-                >
-                  {copiedCode === code ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                </Button>
-                <SyntaxHighlighter style={oneDark} language={match[1]} PreTag="div" className="rounded-md" {...props}>
-                  {code}
-                </SyntaxHighlighter>
-              </div>
+              <code className="bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm" {...props}>
+                {children}
+              </code>
             )
           }
 
+          /* ── Fenced code block ──────────────────────── */
           return (
-            <code className="bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm" {...props}>
-              {children}
-            </code>
+            <div className="relative group my-4">
+              {/* copy-button */}
+              <Button
+                size="sm"
+                variant="ghost"
+                className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={() => copy(code)}
+              >
+                {copied === code ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              </Button>
+
+              <Highlight
+                code={code}
+                language={match[1] as Language}
+                /* leave `theme` undefined → no extra file import */
+              >
+                {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                  <pre
+                    className={`${className} rounded-md overflow-auto text-sm p-4 bg-gray-900 text-gray-100`}
+                    style={style}
+                  >
+                    {tokens.map((line, i) => (
+                      <div key={i} {...getLineProps({ line })}>
+                        {line.map((token, key) => (
+                          <span key={key} {...getTokenProps({ token })} />
+                        ))}
+                      </div>
+                    ))}
+                  </pre>
+                )}
+              </Highlight>
+            </div>
           )
         },
+
+        /* ---- basic markdown element tweaks (unchanged) ---- */
         table({ children }) {
           return (
             <div className="overflow-x-auto">
