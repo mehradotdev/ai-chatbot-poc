@@ -1,5 +1,5 @@
 {
-  "name": "my-v0-project",
+  "name": "ai-chatbot-poc",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,6 +12,7 @@
     "@ai-sdk/anthropic": "latest",
     "@ai-sdk/google": "latest",
     "@ai-sdk/openai": "latest",
+    "@ai-sdk/react": "^1.2.12",
     "@ai-sdk/xai": "latest",
     "@auth/core": "latest",
     "@hookform/resolvers": "^3.9.1",

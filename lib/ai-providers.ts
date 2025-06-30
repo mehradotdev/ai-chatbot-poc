@@ -16,36 +16,40 @@ export interface ModelConfig {
 }
 
 export const AI_PROVIDERS: ModelProvider[] = [
-  {
-    id: "openai",
-    name: "OpenAI",
-    models: [
-      { id: "gpt-4o", name: "GPT-4o", description: "Most capable model" },
-      { id: "gpt-4o-mini", name: "GPT-4o Mini", description: "Fast and efficient" },
-      { id: "gpt-4-turbo", name: "GPT-4 Turbo", description: "Previous generation flagship" },
-    ],
-  },
-  {
-    id: "anthropic",
-    name: "Anthropic",
-    models: [
-      { id: "claude-3-5-sonnet-20241022", name: "Claude 3.5 Sonnet", description: "Most intelligent model" },
-      { id: "claude-3-5-haiku-20241022", name: "Claude 3.5 Haiku", description: "Fast and lightweight" },
-      { id: "claude-3-opus-20240229", name: "Claude 3 Opus", description: "Most powerful model" },
-    ],
-  },
+  // {
+  //   id: "openai",
+  //   name: "OpenAI",
+  //   models: [
+  //     { id: "gpt-4o", name: "GPT-4o", description: "Most capable model" },
+  //     { id: "gpt-4o-mini", name: "GPT-4o Mini", description: "Fast and efficient" },
+  //     { id: "gpt-4-turbo", name: "GPT-4 Turbo", description: "Previous generation flagship" },
+  //   ],
+  // },
+  // {
+  //   id: "anthropic",
+  //   name: "Anthropic",
+  //   models: [
+  //     { id: "claude-3-5-sonnet-20241022", name: "Claude 3.5 Sonnet", description: "Most intelligent model" },
+  //     { id: "claude-3-5-haiku-20241022", name: "Claude 3.5 Haiku", description: "Fast and lightweight" },
+  //     { id: "claude-3-opus-20240229", name: "Claude 3 Opus", description: "Most powerful model" },
+  //   ],
+  // },
   {
     id: "google",
     name: "Google",
     models: [
-      { id: "gemini-1.5-pro", name: "Gemini 1.5 Pro", description: "Advanced reasoning" },
-      { id: "gemini-1.5-flash", name: "Gemini 1.5 Flash", description: "Fast responses" },
+      { id: "gemini-2.5-flash-lite-preview-06-17", name: "Gemini 2.5 Flash Lite Preview", description: "Fastest responses" },
+      { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash", description: "Fast responses" },
+      { id: "gemini-2.5-pro", name: "Gemini 2.5 Pro", description: "Advanced reasoning" },
     ],
   },
   {
     id: "xai",
     name: "xAI",
-    models: [{ id: "grok-beta", name: "Grok Beta", description: "Conversational AI" }],
+    models: [
+      { id: "grok-3-mini-latest", name: "Grok 3 Mini Latest", description: "Cheap and fast" },
+      { id: "grok-beta", name: "Grok Beta", description: "Conversational AI" },
+    ],
   },
 ]
 

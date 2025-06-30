@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useSession, signOut } from "next-auth/react"
-import { useChat } from "ai/react"
+import { useChat } from "@ai-sdk/react"
 import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -40,6 +40,7 @@ export default function ChatPage() {
     },
     onResponse: (response) => {
       const conversationId = response.headers.get("X-Conversation-Id")
+      console.log("responsez", response)
       if (conversationId && !currentConversationId) {
         setCurrentConversationId(conversationId)
         loadConversations()
